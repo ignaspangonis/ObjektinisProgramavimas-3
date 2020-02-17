@@ -59,6 +59,7 @@ void Input(vector<Student> &stud) {
             for (int j = 0; j < n; j++) {
                 stud[i].nd.push_back((1 + rand() % 10));
             }
+            stud[i].exam = 1 + rand() % 10;
             cout << "Sekmingai sugeneruota!" << endl;
         } else {
 
