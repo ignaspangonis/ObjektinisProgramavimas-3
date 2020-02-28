@@ -13,3 +13,8 @@ Programa:
 - Pridėta galimybė skaityti duomenis iš failo;
 - Pridėtas studentų rūšiavimas pagal pavardes abecėlės tvarka;
 - Nuo šiol į ekraną išvedamas galutinis pažymys ir pagal medianą, ir pagal vidurkį.
+- Pažymių formatas pakeistas iš int į float, siekiant išvengti parse'ingo komplikacijų.
+
+### [v0.3](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.3)
+- Padarytas kodo refactor'ingas su antraštėmis;
+- Failo atidarymui panaudotas exception handling.
