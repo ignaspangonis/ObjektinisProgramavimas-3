@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <fstream>
 #include <ctime>
+#include <random>
 using std::cout;
 using std::endl;
 using std::cin;
@@ -20,6 +21,9 @@ using std::setw;
 using std::left;
 using std::ifstream;
 
+void DuomenuKurimas(int y, vector<Student> &stud);
+void FailuKurimas (int x, int y, vector<Student> &stud);
+void FailuKurimas2 (vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
 void Input(vector<Student> &stud);
 void Calculate(vector<Student> &stud);
 void Print(vector<Student> &stud);

@@ -18,5 +18,11 @@ struct Student {
     double res_med;
 };
 
+struct SimpleStudent {
+    string name;
+    string surname;
+    double res_avg;
+};
+
 #endif
 
