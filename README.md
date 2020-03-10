@@ -18,3 +18,10 @@ Programa:
 ### [v0.3](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.3)
 - Padarytas kodo refactor'ingas su antraštėmis;
 - Failo atidarymui panaudotas exception handling.
+
+### [v0.4](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.4)
+- Pridėta galimybė matuoti programos veikimo spartą:
+1. Sugeneruojami penki atsitiktiniai studentų sąrašų failai, sudaryti iš: 1000, 10000, 100000, 1000000, 10000000 įrašų;
+2. Sūrušiuojami studentai į dvi kategorijas (su balais >= 5.0 ir < 5.0).
+3. Surūšiuoti studentai išvedami į du naujus failus.
+4. Atliekama programos veikimo greičio (spartos) analizė, jos rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.4/rezultatai.png)
