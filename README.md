@@ -32,3 +32,8 @@ Programa:
 1. std::deque spartos analizės rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.5/Deque.png)
 2. std::list spartos analizės rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.5/Lists.png)
 3. std::vector spartos analizės rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.5/Vector.png)
+- Testavimo sistemos parametrai:
+1. Procesorius Intel Core i5-7300HQ CPU @ 2.50 GHz
+2. RAM 8.00 GB
+3. HDD 1 TB
+4. SSd 256 GB
