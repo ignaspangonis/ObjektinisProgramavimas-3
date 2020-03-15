@@ -25,3 +25,6 @@ Programa:
 2. Sūrušiuojami studentai į dvi kategorijas (su balais >= 5.0 ir < 5.0).
 3. Surūšiuoti studentai išvedami į du naujus failus.
 4. Atliekama programos veikimo greičio (spartos) analizė, jos rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.4/rezultatai.png)
+
+### [v0.5](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.5)
+-  Išmatuojama patobulintos v0.4 realizacijos veikimo sparta priklausomai nuo naudojamo vieno iš trijų konteinerių: std::vector, std::list, std::deque.
