@@ -10,6 +10,10 @@
 #include <fstream>
 #include <ctime>
 #include <random>
+#include <list>
+#include <iterator>
+#include <deque>
+
 using std::cout;
 using std::endl;
 using std::cin;
@@ -20,12 +24,14 @@ using std::setprecision;
 using std::setw;
 using std::left;
 using std::ifstream;
+using std::list;
+using std::deque;
 
-void DuomenuKurimas(int y, vector<Student> &stud);
-void FailuKurimas (int x, int y, vector<Student> &stud);
-void FailuKurimas2 (vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
-void Input(vector<Student> &stud);
-void Calculate(vector<Student> &stud);
-void Print(vector<Student> &stud);
+void DuomenuKurimas(int y, deque<Student> &stud);
+void FailuKurimas (int x, int y, deque<Student> &stud);
+void FailuKurimas2 (deque<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
+void Input(deque<Student> &stud);
+void Calculate(deque<Student> &stud);
+void Print(deque<Student> &stud);
 
 #endif
