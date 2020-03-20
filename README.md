@@ -29,9 +29,9 @@ Programa:
 ### [v0.5](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.5)
 - Išmatuojama patobulintos v0.4 realizacijos veikimo sparta priklausomai nuo naudojamo vieno iš trijų konteinerių: std::vector, std::list, std::deque.
 - Kiekvienam konteineriui matuoti yra atskiri main.cpp, func.h ir func.cpp failai, o struct.h ir struct.cpp išlieka tie patys.
-1. std::deque spartos analizės rezultatai: ![Deque.png]
-2. std::list spartos analizės rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.5/Lists.png)
-3. std::vector spartos analizės rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.5/Vector.png)
+1. std::deque spartos analizės rezultatai: ![PNG](Deque.png)
+2. std::list spartos analizės rezultatai: ![PNG](Lists.png)
+3. std::vector spartos analizės rezultatai: ![PNG](Vector.png)
 - Testavimo sistemos parametrai:
 1. Procesorius Intel Core i5-7300HQ CPU @ 2.50 GHz
 2. RAM 8.00 GB
