@@ -29,19 +29,17 @@ using std::list;
 using std::deque;
 
 void GenerateRandomFilesV(int x, int y, vector<Student> &stud);
-void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
+void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, bool enhanced, int cycle);
 void Input(vector<Student> &stud);
-void CalculateV(vector<Student> &stud);
+void CalculateV(vector<Student> &stud, bool isMed);
 void PrintV(vector<Student> &stud);
 
-
 void GenerateRandomFilesL(int x, int y, list<Student> &stud);
-void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
-void CalculateL(list<Student> &stud);
-
+void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, int cycle);
+void CalculateL(list<Student> &stud, bool isMed);
 
 void GenerateRandomFilesD(int x, int y, deque<Student> &stud);
-void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream &mldc);
-void CalculateD(deque<Student> &stud);
+void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, int cycle);
+void CalculateD(deque<Student> &stud, bool isMed);
 
 #endif

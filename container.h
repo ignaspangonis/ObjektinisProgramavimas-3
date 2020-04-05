@@ -5,8 +5,8 @@
 #include "func.h"
 #include "struct.h"
 
-void Vec();
-void Lis();
-void Deq();
+void Vec(bool strat, bool enhanced, int cycle);
+void Lis(bool strat, int cycle);
+void Deq(bool strat, int cycle);
 
 #endif //OP_2_0_3_CONTAINER_H
