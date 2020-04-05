@@ -12,8 +12,7 @@ struct Student {
     string surname;
     vector<double> nd;
     int exam;
-    double res_avg;
-    double res_med;
+    double res;
 };
 
 #endif
