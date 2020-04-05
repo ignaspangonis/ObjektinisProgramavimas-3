@@ -1,31 +1,10 @@
 #include "struct.h"
 #include "func.h"
 
-void DuomenuKurimas(int y, vector<Student> &stud) {
-    int ran, sum;
-    int size = 5;
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(1,10);
-    for (int i = 0; i < y; i++) {
-        sum = 0;
-        stud.push_back(Student());
-        stud[i].nd.reserve(size);
-        stud[i].name = "Vardenis" + std::to_string(i + 1);
-        stud[i].surname = "Pavardenis" + std::to_string(i + 1);
-        for (int j = 0; j < size; j++) {
-            ran = dist(rng);
-            stud[i].nd.push_back(ran);
-            sum += ran;
-        }
-        ran = dist(rng);
-        stud[i].exam = ran;
-        // stud[i].res_avg = ( (double) sum / size) * 0.4 + stud[i].exam * 0.6;
-    }
-}
-
-void FailuKurimas2 (vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc) {
-    clock_t start, end;
+void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc) {
+    using hrClock = std::chrono::high_resolution_clock;
+    hrClock::time_point start, end;
+    std::chrono::duration<double> elapsed{};
     ifstream fin;
     string line;
     string ignore_s;
@@ -33,16 +12,13 @@ void FailuKurimas2 (vector<Student> &stud, std::ofstream &fail, std::ofstream &m
     int random_int;
     int n;
     int y = 100;
-    int g;
-    int b;
-    vector<SimpleStudent> geri;
-    vector<SimpleStudent> blogi;
+    vector<Student> geri;
     cout << endl << endl;
+    Student temp;
+
     for (int m = 1; m <= 5; m++) {
-        g = 0;
-        b = 0;
         n = 0;
-        start = clock();
+        start = hrClock::now();
         fin.open("sarasas" + std::to_string(m) + ".txt");
         if (!fin.is_open()) {
             cout << "Nepavyko failo atidarymas" << endl;
@@ -53,106 +29,117 @@ void FailuKurimas2 (vector<Student> &stud, std::ofstream &fail, std::ofstream &m
         for (int l = -1; std::getline(fin, line); l++) {
             std::istringstream iss(line);
             if (l == -1) {
-                if (!(iss >> ignore_s >> ignore_s)) {
-                    break;
-                }
-                for (; ; n++) {
+                for (;; n++) {
                     if (!(iss >> ignore_s)) {
-                        n -= 1;
+                        n -= 3;
                         break;
                     }
                 }
                 continue;
             }
-            stud.push_back(Student());
-            if (!(iss >> stud[l].name >> stud[l].surname)) {
+            temp.nd.reserve(n);
+            if (!(iss >> temp.name >> temp.surname)) {
                 break;
             }
             for (int k = 0; k < n; k++) {
                 if (!(iss >> random_int)) {
                     break;
                 } else {
-                    stud[l].nd.push_back(random_int);
+                    temp.nd.push_back(random_int);
                 }
             }
-            stud[l].nd.shrink_to_fit();
-            if (!(iss >> stud[l].exam)) {
+            if (!(iss >> temp.exam)) {
                 break;
             }
+            stud.push_back(temp);
+            temp.nd.clear();
         } //irasom i studentu vektoriu
 
-        end = clock();
-        cout << "Failu nuskaitymo is failo (su " << y << " irasu) laikas: "
-             << std::setprecision(4) << 1.0 * (end - start)/ CLOCKS_PER_SEC << " sec." << endl;
-
-        Calculate(stud); // suskaiciuojam vidurki
-
-        blogi.reserve(y);
-        geri.reserve(y);
-
-        start = clock();
-        for (int i = 0; i < y; i++) {
-            if (stud[i].res_avg < 5) {
-                blogi.push_back(SimpleStudent());
-                blogi[b].name = stud[i].name;
-                blogi[b].surname = stud[i].surname;
-                blogi[b].res_avg = stud[i].res_avg;
-                b++;
-            } else {
-                geri.push_back(SimpleStudent());
-                geri[g].name = stud[i].name;
-                geri[g].surname = stud[i].surname;
-                geri[g].res_avg = stud[i].res_avg;
-                g++;
-            }
-        } // isskirstom vektoriu i du vektorius
-
-        end = clock();
-        cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas: "
-             << std::setprecision(4) << 1.0 * (end - start)/ CLOCKS_PER_SEC << " sec." << endl;
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failu nuskaitymo is failo (su " << y << " irasu) laikas: " << elapsed.count() << " sec." << endl;
+        CalculateV(stud); // suskaiciuojam vidurki
 
 
-        start = clock();
-        fail  << y << " studentu:" << endl << endl;
-        fail << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde" << left << std::setw(15) << "Galutinis (vid.)" << endl;
+        // isskirstom vektoriu i du vektorius:
+        // blogi studentai lieka "stud", geri pereina i "good"
+        start = hrClock::now();
+        std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.res_avg < s2.res_avg; });
+        int numberOfBad = 0;
+        while (stud[numberOfBad].res_avg < 5.0) {
+            numberOfBad++;
+        }
+        geri.reserve(stud.size() - numberOfBad);
+        std::copy(stud.begin() + numberOfBad, stud.end(), std::back_inserter(geri));
+        stud.resize(numberOfBad);
+        stud.shrink_to_fit();
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas: " << elapsed.count() << " sec." << endl;
+
+
+        fail << y << " studentu:" << endl << endl;
+        fail << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+        for (int i = 0; i < stud[0].nd.size(); i++) {
+            fail << left << std::setw(10) << "ND" + std::to_string(i + 1);
+        }
+        fail << "Egzaminas" << endl;
+
         mldc << y << " studentu:" << endl << endl;
-        mldc << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde" << "Galutinis (vid.)" << endl;
-        for (int i = 0; i < g; i++) {
-            mldc << left << std::setw(17) << geri[i].name << left << std::setw(19) << geri[i].surname
-                 << left << std::setw(17) << geri[i].res_avg << endl;
+        mldc << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+        for (int i = 0; i < geri[0].nd.size(); i++) {
+            mldc << left << std::setw(10) << "ND" + std::to_string(i + 1);
         }
-        for (int i = 0; i < b; i++) {
-            fail << left << std::setw(17) << blogi[i].name << left << std::setw(19) << blogi[i].surname
-                 << left << std::setw(15) << blogi[i].res_avg << endl;
+        mldc << "Egzaminas" << endl;
+
+        for (int i = 0; i < geri.size(); i++) {
+            mldc << left << std::setw(17) << geri[i].name << left << std::setw(19) << geri[i].surname
+                 << left << std::setw(17);
+            for (int j = 0; j < geri[i].nd.size(); j++) {
+                mldc << left << std::setw(10) << geri[i].nd[j];
+            }
+            mldc << geri[i].exam << endl;
+        }
+        for (int i = 0; i < stud.size(); i++) {
+            fail << left << std::setw(17) << stud[i].name << left << std::setw(19) << stud[i].surname
+                 << left << std::setw(15);
+            for (int j = 0; j < stud[i].nd.size(); j++) {
+                fail << left << std::setw(10) << stud[i].nd[j];
+            }
+            fail << stud[i].exam << endl;
         }
 
-        end = clock();
-        cout << "Studentu isvedimas i 2 failus is dvieju grupiu (su " << y << " irasu) laikas: "
-             << std::setprecision(4) << 1.0 * (end - start)/ CLOCKS_PER_SEC << " sec." << endl << endl;
 
         mldc << endl;
         fail << endl;
         stud.clear();
         geri.clear();
-        blogi.clear();
         fin.close();
     }
 }
 
-void FailuKurimas (int x, int y, vector<Student> &stud) {
+void GenerateRandomFilesV(int x, int y, vector<Student> &stud) {
+    int ran;
+    int size = 5;
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 10);
     std::ofstream sarasas("sarasas" + std::to_string(x + 1) + ".txt");
+
     sarasas << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
-    for (int i = 0; i < stud[0].nd.size(); i++){
-        sarasas << left << std::setw(10) << "ND" + std::to_string(i);
+    for (int i = 0; i < size; i++) {
+        sarasas << left << std::setw(10) << "ND" + std::to_string(i + 1);
     }
     sarasas << left << std::setw(15) << "Egzaminas" << endl;
     for (int i = 0; i < y; i++) {
-        sarasas << left << std::setw(17) << stud[i].name << left << std::setw(19) << stud[i].surname;
-        for (int j = 0; j < stud[0].nd.size(); j++) {
-            sarasas << left << std::setw(10) << stud[i].nd[j];
-        }
-        sarasas << stud[i].exam << endl;
-    }
+        sarasas << left << std::setw(17) << "Vardenis" + std::to_string(i + 1)
+                << left << std::setw(19) << "Pavardenis" + std::to_string(i + 1);
+        for (int j = 0; j < size + 1; j++) { // size + 1, nes egzaminas
+            ran = dist(rng);
+            sarasas << left << std::setw(10) << ran;
+        } // sugeneruojam pazymius ir egzamina
+        sarasas << endl;
+    } // generacijos ciklas
     sarasas.close();
 }
 
@@ -162,6 +149,7 @@ void Input(vector<Student> &stud) {
     bool random;
     int n = 0;
     bool file;
+    Student temp;
 
     cout << "Ar norite skaityti duomenis is failo? 0 - ne, 1 - taip." << endl;
     while (true) {
@@ -185,18 +173,13 @@ void Input(vector<Student> &stud) {
 
         cout << "Iveskite teksto failo varda (pvz kursiokai.txt):" << endl;
 
-//        if (!fin) {
-//            cout << "Failo atidarymas nepavyko!";
-//            exit(1);   // call system to stop
-//        }
-
         try {
             cin >> dest;
             fin.open(dest);
             if (!fin) {
                 throw "Failo atidarymas nepavyko!\n";
             }
-        } catch (const char* msg) {
+        } catch (const char *msg) {
             std::cerr << msg;
             exit(1);
         }
@@ -205,7 +188,7 @@ void Input(vector<Student> &stud) {
             std::istringstream iss(line);
             if (l == -1) {
                 iss >> ignore_s >> ignore_s;
-                for (; ; n++) {
+                for (;; n++) {
                     if (!(iss >> ignore_s)) {
                         n -= 1;
                         break;
@@ -213,24 +196,26 @@ void Input(vector<Student> &stud) {
                 }
                 continue;
             }
-            stud.push_back(Student());
-            if (!(iss >> stud[l].name >> stud[l].surname)) { break; }
+            if (!(iss >> temp.name >> temp.surname)) { break; }
             for (int k = 0; k < n; k++) {
-                if (!(iss >> random_int)) { break; } else {
-                    stud[l].nd.push_back(random_int);
+                if (!(iss >> random_int)) { break; }
+                else {
+                    temp.nd.push_back(random_int);
                 }
             }
-            stud[l].nd.shrink_to_fit();
-            if (!(iss >> stud[l].exam)) { break; }
+            temp.nd.shrink_to_fit();
+            if (!(iss >> temp.exam)) { break; }
+            stud.push_back(temp);
+            temp.nd.clear();
         }
         fin.close();
     } else {
         for (int i = 0; cont; i++) {
-            stud.push_back(Student());
+            // stud.push_back(Student());
             cout << "Iveskite varda: " << std::endl;
-            cin >> stud[i].name;
+            cin >> temp.name;
             cout << "Iveskite pavarde: " << std::endl;
-            cin >> stud[i].surname;
+            cin >> temp.surname;
 
             cout << "Ar norite atsitiktinai generuojamu pazymiu? 0 - ne, 1 - taip." << endl;
             cin >> random;
@@ -243,7 +228,9 @@ void Input(vector<Student> &stud) {
             }
 
             if (random) {
-                srand(time(0));
+                std::random_device dev;
+                std::mt19937 rng(dev());
+                std::uniform_int_distribution<std::mt19937::result_type> dist(1, 10);
                 cout << "Iveskite studento namu darbu pazymiu skaiciu:" << endl;
                 cin >> n;
                 while (!std::cin) {
@@ -254,10 +241,11 @@ void Input(vector<Student> &stud) {
                     cin >> n;
                 }
                 for (int j = 0; j < n; j++) {
-                    stud[i].nd.push_back((1 + rand() % 10));
+                    temp.nd.push_back(dist(rng));
                 }
-                stud[i].nd.shrink_to_fit();
-                stud[i].exam = (1 + rand() % 10);
+                temp.nd.shrink_to_fit();
+                temp.exam = dist(rng);
+                stud.push_back(temp);
                 cout << "Sekmingai sugeneruota!" << endl;
             } else {
                 cout << "Iveskite studento pazymius 10-baleje sistemoje (jei norite baigti - iveskite 0): "
@@ -273,17 +261,17 @@ void Input(vector<Student> &stud) {
                         continue;
                     }
                     if (x == 0) {
-                        if (stud[i].nd.empty()) {
+                        if (temp.nd.empty()) {
                             cout << "Neivedete jokiu pazymiu!" << endl;
                             continue;
                         } else {
                             break;
                         }
                     } else {
-                        stud[i].nd.push_back(x);
+                        temp.nd.push_back(x);
                     }
                 }
-                stud[i].nd.shrink_to_fit(); // optimizuoja vektoriaus dydi atmintyje
+                temp.nd.shrink_to_fit(); // optimizuoja vektoriaus dydi atmintyje
 
 
                 cout << "Iveskite studento egzamino vertinima 10-baleje sistemoje: " << endl;
@@ -296,7 +284,8 @@ void Input(vector<Student> &stud) {
                              << std::endl;
                         continue;
                     }
-                    stud[i].exam = x;
+                    temp.exam = x;
+                    stud.push_back(temp);
                     break;
                 }
             }
@@ -317,27 +306,30 @@ void Input(vector<Student> &stud) {
     }
 }
 
-void Calculate(vector<Student> &stud) {
+void CalculateV(vector<Student> &stud) {
+    double avg;
+    double med;
     for (int i = 0; i < stud.size(); i++) {
+        avg = 0;
         // mediana:
         sort(stud[i].nd.begin(), stud[i].nd.end());
         if (stud[i].nd.size() % 2 != 0) {
-            stud[i].med = stud[i].nd[stud[i].nd.size() / 2];
+            med = stud[i].nd[stud[i].nd.size() / 2];
         } else {
-            stud[i].med = (stud[i].nd[(stud[i].nd.size() / 2) - 1] +
-                           stud[i].nd[stud[i].nd.size() / 2]) / 2.0;
+            med = (stud[i].nd[(stud[i].nd.size() / 2) - 1] +
+                   stud[i].nd[stud[i].nd.size() / 2]) / 2.0;
         }
-        stud[i].res_med = 0.4 * stud[i].med + 0.6 * stud[i].exam;
+        stud[i].res_med = 0.4 * med + 0.6 * stud[i].exam;
         // vidurkis:
         for (int j = 0; j < stud[i].nd.size(); j++) {
-            stud[i].avg += stud[i].nd[j];
+            avg += stud[i].nd[j];
         }
-        stud[i].avg /= stud[i].nd.size();
-        stud[i].res_avg = 0.4 * stud[i].avg + 0.6 * stud[i].exam;
+        avg /= stud[i].nd.size();
+        stud[i].res_avg = 0.4 * avg + 0.6 * stud[i].exam;
     }
 }
 
-void Print(vector<Student> &stud) {
+void PrintV(vector<Student> &stud) {
     cout << "\nPavarde             Vardas              Galutinis (Vid.)  Galutinis (Med.)\n" <<
          "----------------------------------------------------------------------------" << std::endl;
 
@@ -364,3 +356,373 @@ void Print(vector<Student> &stud) {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream &mldc) {
+    using hrClock = std::chrono::high_resolution_clock;
+    hrClock::time_point start, end;
+    std::chrono::duration<double> elapsed{};
+    ifstream fin;
+    string line;
+    string ignore_s;
+    string dest;
+    int random_int;
+    int n;
+    int y = 100;
+    list<Student> geri;
+    cout << endl << endl;
+    Student temp;
+
+    for (int m = 1; m <= 5; m++) {
+        n = 0;
+        start = hrClock::now();
+        fin.open("sarasas" + std::to_string(m) + ".txt");
+        if (!fin.is_open()) {
+            cout << "Nepavyko failo atidarymas" << endl;
+            break;
+        }
+        y *= 10;
+        for (int l = -1; std::getline(fin, line); l++) {
+            std::istringstream iss(line);
+            if (l == -1) {
+                for (;; n++) {
+                    if (!(iss >> ignore_s)) {
+                        n -= 3;
+                        break;
+                    }
+                }
+                continue;
+            }
+            temp.nd.reserve(n);
+            if (!(iss >> temp.name >> temp.surname)) {
+                break;
+            }
+            for (int k = 0; k < n; k++) {
+                if (!(iss >> random_int)) {
+                    break;
+                } else {
+                    temp.nd.push_back(random_int);
+                }
+            }
+            if (!(iss >> temp.exam)) {
+                break;
+            }
+            stud.push_back(temp);
+            temp.nd.clear();
+        } //irasom i studentu vektoriu
+
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failu nuskaitymo is failo (su " << y << " irasu) laikas: " << elapsed.count() << " sec." << endl;
+        CalculateL(stud); // suskaiciuojam vidurki
+
+
+        // isskirstom vektoriu i du vektorius:
+        // blogi studentai lieka "stud", geri pereina i "good"
+        start = hrClock::now();
+        stud.sort([](Student &s1, Student &s2) { return s1.res_avg < s2.res_avg; });
+        list<Student>::iterator itt;
+        itt = stud.begin();
+        int count = 0;
+        while (itt->res_avg < 5.0) {
+            itt++;
+            count++;
+        }
+        std::copy(itt, stud.end(), std::back_inserter(geri));
+        stud.resize(count);
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas: " << elapsed.count() << " sec." << endl;
+
+
+        fail << y << " studentu:" << endl << endl;
+        fail << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+
+
+        itt = stud.begin();
+        for (int i = 0; i < itt->nd.size(); i++) {
+            fail << left << std::setw(10) << "ND" + std::to_string(i + 1);
+        }
+        fail << "Egzaminas" << endl;
+
+        mldc << y << " studentu:" << endl << endl;
+        mldc << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+        for (int i = 0; i < itt->nd.size(); i++) {
+            mldc << left << std::setw(10) << "ND" + std::to_string(i + 1);
+        }
+        mldc << "Egzaminas" << endl;
+
+
+
+        for (itt = geri.begin(); itt != geri.end(); itt++) {
+            mldc << left << std::setw(17) << itt->name << left << std::setw(19) << itt->surname
+                 << left << std::setw(17);
+            for (int j = 0; j < itt->nd.size(); j++) {
+                mldc << left << std::setw(10) << itt->nd[j];
+            }
+            mldc << itt->exam << endl;
+        }
+        for (itt = stud.begin(); itt != stud.end(); itt++) {
+            fail << left << std::setw(17) << itt->name << left << std::setw(19) << itt->surname
+                 << left << std::setw(15);
+            for (int j = 0; j < itt->nd.size(); j++) {
+                fail << left << std::setw(10) << itt->nd[j];
+            }
+            fail << itt->exam << endl;
+        }
+
+
+        mldc << endl;
+        fail << endl;
+        stud.clear();
+        geri.clear();
+        fin.close();
+    }
+}
+
+void GenerateRandomFilesL(int x, int y, list<Student> &stud) {
+    int ran;
+    int size = 5;
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 10);
+    std::ofstream sarasas("sarasas" + std::to_string(x + 1) + ".txt");
+
+    sarasas << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+    for (int i = 0; i < size; i++) {
+        sarasas << left << std::setw(10) << "ND" + std::to_string(i + 1);
+    }
+    sarasas << left << std::setw(15) << "Egzaminas" << endl;
+    for (int i = 0; i < y; i++) {
+        sarasas << left << std::setw(17) << "Vardenis" + std::to_string(i + 1)
+                << left << std::setw(19) << "Pavardenis" + std::to_string(i + 1);
+        for (int j = 0; j < size + 1; j++) { // size + 1, nes egzaminas
+            ran = dist(rng);
+            sarasas << left << std::setw(10) << ran;
+        } // sugeneruojam pazymius ir egzamina
+        sarasas << endl;
+    } // generacijos ciklas
+    sarasas.close();
+}
+
+
+
+void CalculateL(list<Student> &stud) {
+    double avg;
+    double med;
+    list<Student>::iterator it;
+    it = stud.begin();
+    for (it = stud.begin(); it != stud.end(); it++) {
+        avg = 0;
+        // mediana:
+        sort(it->nd.begin(), it->nd.end());
+        if (it->nd.size() % 2 != 0) {
+            med = it->nd[it->nd.size() / 2];
+        } else {
+            med = (it->nd[(it->nd.size() / 2) - 1] +
+                   it->nd[it->nd.size() / 2]) / 2.0;
+        }
+        it->res_med = 0.4 * med + 0.6 * it->exam;
+        // vidurkis:
+        for (int j = 0; j < it->nd.size(); j++) {
+            avg += it->nd[j];
+        }
+        avg /= it->nd.size();
+        it->res_avg = 0.4 * avg + 0.6 * it->exam;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream &mldc) {
+    using hrClock = std::chrono::high_resolution_clock;
+    hrClock::time_point start, end;
+    std::chrono::duration<double> elapsed{};
+    ifstream fin;
+    string line;
+    string ignore_s;
+    string dest;
+    int random_int;
+    int n;
+    int y = 100;
+    deque<Student> geri;
+    cout << endl << endl;
+    Student temp;
+
+    for (int m = 1; m <= 5; m++) {
+        n = 0;
+        start = hrClock::now();
+        fin.open("sarasas" + std::to_string(m) + ".txt");
+        if (!fin.is_open()) {
+            cout << "Nepavyko failo atidarymas" << endl;
+            break;
+        }
+        y *= 10;
+        for (int l = -1; std::getline(fin, line); l++) {
+            std::istringstream iss(line);
+            if (l == -1) {
+                for (;; n++) {
+                    if (!(iss >> ignore_s)) {
+                        n -= 3;
+                        break;
+                    }
+                }
+                continue;
+            }
+            temp.nd.reserve(n);
+            if (!(iss >> temp.name >> temp.surname)) {
+                break;
+            }
+            for (int k = 0; k < n; k++) {
+                if (!(iss >> random_int)) {
+                    break;
+                } else {
+                    temp.nd.push_back(random_int);
+                }
+            }
+            if (!(iss >> temp.exam)) {
+                break;
+            }
+            stud.push_back(temp);
+            temp.nd.clear();
+        } //irasom i studentu vektoriu
+
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failu nuskaitymo is failo (su " << y << " irasu) laikas: " << elapsed.count() << " sec." << endl;
+        CalculateD(stud); // suskaiciuojam vidurki
+
+
+        // isskirstom vektoriu i du vektorius:
+        // blogi studentai lieka "stud", geri pereina i "good"
+        start = hrClock::now();
+        std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.res_avg < s2.res_avg; });
+        deque<Student>::iterator itt;
+        itt = stud.begin();
+        int count = 0;
+        while (itt->res_avg < 5.0) {
+            itt++;
+            count++;
+        }
+        std::copy(itt, stud.end(), std::back_inserter(geri));
+        stud.resize(count);
+        end = hrClock::now();
+        elapsed = end - start;
+        cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas: " << elapsed.count() << " sec." << endl;
+
+        fail << y << " studentu:" << endl << endl;
+        fail << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+
+
+        itt = stud.begin();
+        for (int i = 0; i < itt->nd.size(); i++) {
+            fail << left << std::setw(10) << "ND" + std::to_string(i + 1);
+        }
+        fail << "Egzaminas" << endl;
+
+        mldc << y << " studentu:" << endl << endl;
+        mldc << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+        for (int i = 0; i < itt->nd.size(); i++) {
+            mldc << left << std::setw(10) << "ND" + std::to_string(i + 1);
+        }
+        mldc << "Egzaminas" << endl;
+
+
+
+        for (itt = geri.begin(); itt != geri.end(); itt++) {
+            mldc << left << std::setw(17) << itt->name << left << std::setw(19) << itt->surname
+                 << left << std::setw(17);
+            for (int j = 0; j < itt->nd.size(); j++) {
+                mldc << left << std::setw(10) << itt->nd[j];
+            }
+            mldc << itt->exam << endl;
+        }
+        for (itt = stud.begin(); itt != stud.end(); itt++) {
+            fail << left << std::setw(17) << itt->name << left << std::setw(19) << itt->surname
+                 << left << std::setw(15);
+            for (int j = 0; j < itt->nd.size(); j++) {
+                fail << left << std::setw(10) << itt->nd[j];
+            }
+            fail << itt->exam << endl;
+        }
+
+
+
+        mldc << endl;
+        fail << endl;
+        stud.clear();
+        geri.clear();
+        fin.close();
+    }
+}
+
+void GenerateRandomFilesD(int x, int y, deque<Student> &stud) {
+    int ran;
+    int size = 5;
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 10);
+    std::ofstream sarasas("sarasas" + std::to_string(x + 1) + ".txt");
+
+    sarasas << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
+    for (int i = 0; i < size; i++) {
+        sarasas << left << std::setw(10) << "ND" + std::to_string(i + 1);
+    }
+    sarasas << left << std::setw(15) << "Egzaminas" << endl;
+    for (int i = 0; i < y; i++) {
+        sarasas << left << std::setw(17) << "Vardenis" + std::to_string(i + 1)
+                << left << std::setw(19) << "Pavardenis" + std::to_string(i + 1);
+        for (int j = 0; j < size + 1; j++) { // size + 1, nes egzaminas
+            ran = dist(rng);
+            sarasas << left << std::setw(10) << ran;
+        } // sugeneruojam pazymius ir egzamina
+        sarasas << endl;
+    } // generacijos ciklas
+    sarasas.close();
+}
+
+
+
+void CalculateD(deque<Student> &stud) {
+    double avg;
+    double med;
+    deque<Student>::iterator it;
+    it = stud.begin();
+    for (it = stud.begin(); it != stud.end(); it++) {
+        avg = 0;
+        // mediana:
+        sort(it->nd.begin(), it->nd.end());
+        if (it->nd.size() % 2 != 0) {
+            med = it->nd[it->nd.size() / 2];
+        } else {
+            med = (it->nd[(it->nd.size() / 2) - 1] +
+                   it->nd[it->nd.size() / 2]) / 2.0;
+        }
+        it->res_med = 0.4 * med + 0.6 * it->exam;
+        // vidurkis:
+        for (int j = 0; j < it->nd.size(); j++) {
+            avg += it->nd[j];
+        }
+        avg /= it->nd.size();
+        it->res_avg = 0.4 * avg + 0.6 * it->exam;
+    }
+}

@@ -12,16 +12,8 @@ struct Student {
     string surname;
     vector<double> nd;
     int exam;
-    double avg = 0;
-    double med;
     double res_avg;
     double res_med;
-};
-
-struct SimpleStudent {
-    string name;
-    string surname;
-    double res_avg;
 };
 
 #endif
