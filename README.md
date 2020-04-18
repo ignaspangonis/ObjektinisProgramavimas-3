@@ -26,6 +26,27 @@ Programa:
 3. Surūšiuoti studentai išvedami į du naujus failus.
 4. Atliekama programos veikimo greičio (spartos) analizė, jos rezultatai: [PNG](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/blob/v0.4/rezultatai.png)
 
+### [v0.4.1](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.4.1)
+- Pakeitimai programoje:
+1. Efektyvesnis laiko matavimas - naudojama biblioteka std::chrono.
+2. Efektyvesnis failų generavimas - nebenaudojamas studentų vektorius saugoti informacijai.
+3. Nuo šiol studentai į vektorių įrašomi naudojant "temp" kaip laikiną kiekvieno studento objektą.
+4. Efektyvesnis atsitiktinių skaičių generavimas.
+5. Sumažintas Student struktūros dydis pakeitus kodą ir pašalinus nebūtinus kintamuosius.
+6. Pridėtas makefile
+
+Analizės rezultatai: 
+
+
+| Įrašų kiekis | Failų generavimas | Failų skaitymas | Studentų skaidymas | Išlaikiusių ir neišlaikiusių išvedimas į failus|
+| ------------ |-------------------|-----------------|--------------------|------------------------------------------------|
+| 1000         | 0.015949 s        | 0.009973 s      | 0.005021 s         | 0.023961 s                                     |
+| 10000        | 0.140623 s        | 0.088793 s      | 0.054859 s         | 0.231388 s                                     |
+| 100000       | 1.44513 s         | 0.850717 s      | 0.718081 s         | 2.25497 s                                      |
+| 1000000      | 14.1721 s         | 8.20905 s       | 8.52424 s          | 21.6391 s                                      |
+| 10000000     | 135.937 s         | 80.9885 s       | 83.3212 s          | 203.6815 s                                     |
+
+
 ### [v0.5](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.5)
 - Išmatuojama patobulintos v0.4 realizacijos veikimo sparta priklausomai nuo naudojamo vieno iš trijų konteinerių: std::vector, std::list, std::deque.
 #### Spartos analizės rezultatai:
@@ -100,7 +121,9 @@ Konteineris | strategija
 | 1000000 | 8.36857 s | 8.01802 s | 1.37508 s | 3.09155 s | 2.29689 s | 9.0822 s | 8.35948 s |
 | 10000000 | 84.0689 s | 80.8637 s | 13.5134 s | 29.9869 s | 23.6324 s | 89.2664 s | 80.3982 s |
 
-
+### [v1.0.1](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v1.0.1)
+#### Patobulinimai:
+- v1.0 versijoje buvo atsisakyta nebūtino struct.cpp failo, bet jis per klaidą paliktas makefile ir README.md programos diegimo instrukcijoje. Šios klaidos ištaisytos 1.0.1 versijoje.
 
 ## Programos diegimas:
 1. Parsisiųsti programą.
