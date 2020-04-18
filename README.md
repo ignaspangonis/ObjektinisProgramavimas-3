@@ -109,8 +109,8 @@ Konteineris | strategija
 4. Sukompiliuoti programą:
 a) Jei naudojate GCC su GNU Make, įrašykite: `make`
 b) Jei naudojate GCC be GNU Make, įrašykite:
-- `g++ -c main.cpp func.cpp struct.cpp`
-- `g++ -o main main.o func.o struct.o`
+- `g++ -c main.cpp container.cpp func.cpp`
+- `g++ -o main main.o container.o func.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
 ## Programos naudojimas:
