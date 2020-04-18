@@ -11,33 +11,34 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o container.o func.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-## Programos naudojimas:
+## Programos (v1.1) naudojimas:
 ### Pavyzdžiai:
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
 0
 Programos matavimo strategija - pirma (iveskite 0), antra (iveskite 1)?
-0
+1
 Konteineris - vector (v), list (l), deque (d)?:
 v
-Kiek failu generuoti (1-5)?:
-3
-
-Kuriamas sarasas is 1000 studentu.
-
-Kuriamas sarasas is 10000 studentu.
-
-Kuriamas sarasas is 100000 studentu.
+Ar norite generuoti naujus failus, jei dar negeneravote (1), ar ne (0)?
+0
+Failu dydis - nuo 1000 studentu, su kiekvienu failu didinant si skaiciu 10 kartu.
+Kiek failu skaityti ir/ar generuoti (1-5)?:
+4
+Ar norite naudoti studentu skirstyma spartinancius algoritmus vektoriui (1), ar ne (0)?
+1
 
 
 Norite skaiciuoti pagal vidurki (iveskite 0), ar mediana (iveskite 1)?
-1
+0
 Failu nuskaitymo is failo (su 1000 irasu) laikas: 0 sec.
-Failo (su 1000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.015658 sec.
-Failu nuskaitymo is failo (su 10000 irasu) laikas: 0.078135 sec.
-Failo (su 10000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.046887 sec.
-Failu nuskaitymo is failo (su 100000 irasu) laikas: 0.749824 sec.
-Failo (su 100000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.718942 sec.
+Failo (su 1000 irasu) rusiavimo i dvi grupes laikas (2 strategija, geresni algoritmai): 0 sec.
+Failu nuskaitymo is failo (su 10000 irasu) laikas: 0.078097 sec.
+Failo (su 10000 irasu) rusiavimo i dvi grupes laikas (2 strategija, geresni algoritmai): 0.015596 sec.
+Failu nuskaitymo is failo (su 100000 irasu) laikas: 0.781453 sec.
+Failo (su 100000 irasu) rusiavimo i dvi grupes laikas (2 strategija, geresni algoritmai): 0.12497 sec.
+Failu nuskaitymo is failo (su 1000000 irasu) laikas: 7.80297 sec.
+Failo (su 1000000 irasu) rusiavimo i dvi grupes laikas (2 strategija, geresni algoritmai): 1.51734 sec.
 ```
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
@@ -61,14 +62,24 @@ Gasiunas            Augustas            8.16              8.16
 
 ### [v1.1](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v1.1)
 #### Patobulinimai:
-- Atsisakyta nereikalingų atskirų metodų failų generavimui su std::list ir std::deque
-- Nuo struktūrų pereita prie klasių. Sukurti get'eriai bei set'eriai darbui su klasių objektais. Atitinkamai sutvarkytos ir perdarytos funkcijos.
-- Vietose, kur galimas int ribų viršijimas, pereita prie long long int.
+- Atsisakyta nereikalingų atskirų metodų failų generavimui su std::list ir std::deque;
+- Nuo struktūrų pereita prie klasių. Sukurti get'eriai bei set'eriai darbui su klasių objektais. Atitinkamai sutvarkytos ir perdarytos funkcijos;
+- Vietose, kur galimas int ribų viršijimas, pereita prie long long int;
 - Atlikta analizė su flag'ais: O1, O2, O3.
 
-#### Spartos analizės rezultatai (skaidymas į dvi grupes):
+#### Spartos analizės rezultatai:
+- O1, O2, O3 - naudojami flag'ai;
+- Naudojamas vektorius su greičiausiais algortimais (2 strategija, optimizuoti algoritmai);
+- A - nuskaitymas iš failo į objektų konteinerį;
+- B - skirstymas į dvi grupes;
+- Laikas nurodytas sekundėmis.
 
+| Įrašų kiekis | Struktūros A | Struktūros B | Klasės A | Klasės B | Klasės A O1 | Klasės B O1 | Klasės A O2 | Klasės B O2 | Klasės A O3 | Klasės B O3 |
+|--------------|--------------|--------------|----------|----------|-------------|-------------|-------------|-------------|-------------|-------------|
+| 100000       | 0.75188      | 0.124996     | 0.781066 | 0.124971 | 0.792878    | 0.131649    | 0.765471    | 0.125275    | 0.785948    | 0.12497     |
+| 1000000      | 7.92602      | 1.3045       | 8.0166   | 1.35085  | 8.33828     | 1.51817     | 7.68328     | 1.43428     | 7.85201     | 1.45358     |
+| 10000000     | 78.6323      | 13.1134      | 79.9157  | 13.2285  | 81.4987     | 14.9894     | 75.0212     | 14.2151     | 77.6569     | 14.0493     |
 
-
-
-
+#### Spartos analizės išvados:
+- Veiksmai su struktūra buvo nežymiai spartesni už veiksmus su klase.
+- O2 buvo efektyviausias optimizavimo flag'as nuskaitymui (A), o skaidymas efektyviausiai veikė be flag'ų.
