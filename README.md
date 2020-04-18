@@ -57,6 +57,25 @@ Skaidymas į dvi grupes:
 3. HDD 1 TB
 4. SSD 256 GB
 
+### [v0.4.1](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v0.4.1)
+- Pakeitimai programoje:
+1. Efektyvesnis laiko matavimas - naudojama biblioteka std::chrono.
+2. Efektyvesnis failų generavimas - nebenaudojamas studentų vektorius saugoti informacijai.
+3. Nuo šiol studentai į vektorių įrašomi naudojant "temp" kaip laikiną kiekvieno studento objektą.
+4. Efektyvesnis atsitiktinių skaičių generavimas.
+5. Sumažintas Student struktūros dydis pakeitus kodą ir pašalinus nebūtinus kintamuosius.
+6. Pridėtas makefile
+
+#### Spartos analizės rezultatai: 
+
+| Įrašų kiekis | Failų generavimas | Failų skaitymas | Studentų skaidymas | Išlaikiusių ir neišlaikiusių išvedimas į failus|
+| ------------ |-------------------|-----------------|--------------------|------------------------------------------------|
+| 1000         | 0.015949 s        | 0.009973 s      | 0.005021 s         | 0.023961 s                                     |
+| 10000        | 0.140623 s        | 0.088793 s      | 0.054859 s         | 0.231388 s                                     |
+| 100000       | 1.44513 s         | 0.850717 s      | 0.718081 s         | 2.25497 s                                      |
+| 1000000      | 14.1721 s         | 8.20905 s       | 8.52424 s          | 21.6391 s                                      |
+| 10000000     | 135.937 s         | 80.9885 s       | 83.3212 s          | 203.6815 s                                     |
+
 ### [v1.0](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v1.0)
 #### Patobulinimai:
 - Dalis for ciklų pakeista į foreach ciklus;
@@ -83,11 +102,7 @@ Konteineris | strategija
 
 
 
-
-
-
-
-## Programos diegimas ir naudojimas:
+## Programos diegimas:
 1. Parsisiųsti programą.
 2. Parsisiųsti ir įdiegti [GCC](https://gcc.gnu.org/) kompiliatorių.
 3. Atsidaryti terminalo langą ir jame įvesti programos vietą diske.
@@ -98,5 +113,48 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o func.o struct.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-Naudotojimosi aprašas nurodytas ant release:
-https://github.com/ignaspangonis/ObjektinisProgramavimas-2/releases/tag/v1.0
+## Programos naudojimas:
+### Pavyzdžiai:
+```
+Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
+0
+Programos matavimo strategija - pirma (iveskite 0), antra (iveskite 1)?
+0
+Konteineris - vector (v), list (l), deque (d)?:
+v
+Kiek failu generuoti (1-5)?:
+3
+
+Kuriamas sarasas is 1000 studentu.
+
+Kuriamas sarasas is 10000 studentu.
+
+Kuriamas sarasas is 100000 studentu.
+
+
+Norite skaiciuoti pagal vidurki (iveskite 0), ar mediana (iveskite 1)?
+1
+Failu nuskaitymo is failo (su 1000 irasu) laikas: 0 sec.
+Failo (su 1000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.015658 sec.
+Failu nuskaitymo is failo (su 10000 irasu) laikas: 0.078135 sec.
+Failo (su 10000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.046887 sec.
+Failu nuskaitymo is failo (su 100000 irasu) laikas: 0.749824 sec.
+Failo (su 100000 irasu) rusiavimo i dvi grupes laikas (1 strategija): 0.718942 sec.
+```
+```
+Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
+1
+Ar norite skaityti duomenis is failo? 0 - ne, 1 - taip.
+1
+Iveskite teksto failo varda (pvz kursiokai.txt):
+kursiokai.txt
+Norite skaiciuoti pagal vidurki (iveskite 0), ar mediana (iveskite 1)?
+0
+
+Pavarde             Vardas              Galutinis (Vid.)  Galutinis (Med.)
+----------------------------------------------------------------------------
+Andrionis           Andrius             4.80              4.80
+Audrius             Lapas               6.32              6.32
+Pangonis            Ignas               4.80              4.80
+Gasiunas            Augustas            8.16              8.16
+```
