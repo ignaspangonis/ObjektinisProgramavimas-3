@@ -1,4 +1,4 @@
-# Objektinio programavimo užduotis nr. 3 (nr.2 tęsinys)
+# Objektinio programavimo užduotis nr. 3 (nr. 2 tęsinys)
 
 ## Programos diegimas:
 1. Parsisiųsti programą.
@@ -7,8 +7,8 @@
 4. Sukompiliuoti programą:
 a) Jei naudojate GCC su GNU Make, įrašykite: `make`
 b) Jei naudojate GCC be GNU Make, įrašykite:
-- `g++ -c main.cpp container.cpp func.cpp`
-- `g++ -o main main.o container.o func.o`
+- `g++ -c main.cpp container.cpp func.cpp Student.cpp`
+- `g++ -o main main.o container.o func.o Student.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
 ## Programos (v1.1) naudojimas:
