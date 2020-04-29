@@ -88,3 +88,7 @@ Gasiunas            Augustas            8.16              8.16
 #### Spartos analizės išvados:
 - Veiksmai su struktūra buvo nežymiai spartesni už veiksmus su klase.
 - O2 buvo efektyviausias optimizavimo flag'as nuskaitymui (A), o skaidymas efektyviausiai veikė be flag'ų.
+
+### [v1.2](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v1.2)
+#### Patobulinimai:
+- Realizuoti operatoriai: įvesties >>, išvesties <<, lyginimo ==, !=, >, <, >=, <=
