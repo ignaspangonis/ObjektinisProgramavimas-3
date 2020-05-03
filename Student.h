@@ -31,7 +31,6 @@ using std::list;
 using std::deque;
 using std::istream;
 
-//https://stackoverflow.com/questions/11415469/setup-stdvector-in-class-constructor
 class Student {
 private:
     string name;
@@ -40,8 +39,6 @@ private:
     int exam;
     double res;
 public:
-    Student();
-    virtual ~Student();
 
     const string &getName() const;
     const string &getSurname() const;
@@ -49,30 +46,75 @@ public:
     int getExam() const;
     double getRes() const; // get'eriai
 
-    std::istream& readStudent(std::istream& in, int n);
+    void setName(const string &name_);
+    void setSurname(const string &surname_);
+    void setNd(const vector<double> &nd_);
+    void setExam(int exam_);
+    void setRes(double res_); // set'eriai
 
-    void setName(const string &name);
-    void setSurname(const string &surname);
-    void setNd(const vector<double> &nd);
-    void setExam(int exam);
-    void setRes(double res); // set'eriai
+    void sortNd() {
+        sort(nd.begin(), nd.end());
+    }
 
-    /*
     friend std::istream& operator >>(std::istream& in, Student& s) {
         in >> s.name >> s.surname;
         in >> s.exam;
+        s.nd.clear();
         for (int random_int; in >> random_int;) {
             s.nd.push_back(random_int);
         }
+        s.nd.shrink_to_fit();
         return in;
+    }
+    friend std::ostream& operator <<(std::ostream& out, Student& s) {
+        out << left << setw(17) << s.name << left << std::setw(19) << s.surname
+            << left << setw(17);
+        for (double j : s.nd) {
+            out << left << setw(10) << j;
+        }
+        out << s.exam << endl;
+        return out;
     }
     bool operator<(const Student& other) const {
         return res < other.res;
     }
-     */
-    void sortNd() {
-        sort(nd.begin(), nd.end());
+    bool operator<(const double x) const {
+        return res < x;
     }
+    bool operator>(const Student& other) const {
+        return res > other.res;
+    }
+    bool operator>(const double x) const {
+        return res > x;
+    }
+    bool operator<=(const Student& other) const {
+        return res <= other.res;
+    }
+    bool operator<=(const double x) const {
+        return res <= x;
+    }
+    bool operator>=(const Student& other) const {
+        return res >= other.res;
+    }
+    bool operator>=(const double x) const {
+        return res >= x;
+    }
+    bool operator==(const Student& other) const {
+        return res == other.res;
+    }
+    bool operator==(const double x) const {
+        return res == x;
+    }
+    bool operator!=(const Student& other) const {
+        return res != other.res;
+    }
+    bool operator!=(const double x) const {
+        return res != x;
+    }
+    /*
+    lyginimo operatoriai, skirti palyginti dviems objektams (studentų rezultatams) arba
+    objektui (studento rezultatui) ir realiajam skaičiui.
+    */
 };
 
 #endif
