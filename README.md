@@ -93,7 +93,8 @@ Gasiunas            Augustas            8.16              8.16
 #### Patobulinimai:
 - Realizuoti operatoriai: įvesties >>, išvesties <<, lyginimo ==, !=, >, <, >=, <=;
 - Pašalintas Student klasės metodas readStudent(), kurį pakeitė operatorius >>.
+- Taisyklingiau apibrėžtas exception, kai įvesto failo vardo nėra.
 #### Pastabos:
-- Lyginimo operatoriai yra skirti lyginti studento galutiniams balams.
+- Lyginimo operatoriai yra skirti palyginti dviems objektams (studentų rezultatams) arba objektui (studento rezultatui) ir realiajam skaičiui.
 - Įvesties operatorius nuskaito iš stream'o studento duomenis tokiu eiliškumu: vardas, pavardė, egzaminas, namų darbai;
 - Išvesties operatorius įrašo į stream'ą studento duomenis tokiu eiliškumu: vardas, pavardė, namų darbai, egzaminas;
