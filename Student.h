@@ -31,17 +31,23 @@ using std::list;
 using std::deque;
 using std::istream;
 
-class Student {
+class Person {
+protected:
+    std::string name;
+    std::string surname;
+public:
+    virtual const string &getName() const = 0;
+    virtual const string &getSurname() const = 0;
+};
+
+class Student : public Person {
 private:
-    string name;
-    string surname;
     vector<double> nd;
     int exam;
     double res;
 public:
-
-    const string &getName() const;
-    const string &getSurname() const;
+    const string &getName() const override;
+    const string &getSurname() const override;
     const vector<double> &getNd() const;
     int getExam() const;
     double getRes() const; // get'eriai

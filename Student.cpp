@@ -1,5 +1,6 @@
 #include "Student.h"
 
+class Person;
 class Student;
 
 // get'eriai:
