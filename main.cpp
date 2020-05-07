@@ -69,7 +69,7 @@ int main() {
 
         // iškviečiamos container.cpp funkcijos pagal pasirinktą konteinerį:
         if (cont == 'v') {
-            bool enhanced;
+            bool enhanced = false;
             if (strat) {
                 cout << "Ar norite naudoti studentu skirstyma spartinancius algoritmus vektoriui (1), ar ne (0)?"
                      << endl;
@@ -83,8 +83,7 @@ int main() {
                 }
             } // pasirenkamas algoritmas
             Vec(strat, enhanced, cycle);
-        }
-        else if (cont == 'l') {
+        } else if (cont == 'l') {
             Lis(strat, cycle);
         } else if (cont == 'd') {
             Deq(strat, cycle);
@@ -109,7 +108,7 @@ int main() {
             cin >> med;
         }
         CalculateV(stud, med);
-        PrintV(stud);
+        Print(stud);
         return 0;
     }
 }

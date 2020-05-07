@@ -11,7 +11,7 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o container.o func.o Student.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-## Programos (v1.1) naudojimas:
+## Programos (v1.2) naudojimas:
 ### Pavyzdžiai:
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
@@ -88,3 +88,13 @@ Gasiunas            Augustas            8.16              8.16
 #### Spartos analizės išvados:
 - Veiksmai su struktūra buvo nežymiai spartesni už veiksmus su klase.
 - O2 buvo efektyviausias optimizavimo flag'as nuskaitymui (A), o skaidymas efektyviausiai veikė be flag'ų.
+
+### [v1.2](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v1.2)
+#### Patobulinimai:
+- Realizuoti operatoriai: įvesties >>, išvesties <<, lyginimo ==, !=, >, <, >=, <=;
+- Pašalintas Student klasės metodas readStudent(), kurį pakeitė operatorius >>.
+- Taisyklingiau apibrėžtas exception, kai įvesto failo vardo nėra.
+#### Pastabos:
+- Lyginimo operatoriai yra skirti palyginti dviems objektams (studentų rezultatams) arba objektui (studento rezultatui) ir realiajam skaičiui.
+- Įvesties operatorius nuskaito iš stream'o studento duomenis tokiu eiliškumu: vardas, pavardė, egzaminas, namų darbai;
+- Išvesties operatorius įrašo į stream'ą studento duomenis tokiu eiliškumu: vardas, pavardė, namų darbai, egzaminas;

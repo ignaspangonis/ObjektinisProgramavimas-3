@@ -1,6 +1,7 @@
 #include "func.h"
 
-void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, bool enhanced, int cycle) {
+void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, bool enhanced,
+                        int cycle) {
     using hrClock = std::chrono::high_resolution_clock;
     hrClock::time_point start, end;
     std::chrono::duration<double> elapsed{};
@@ -30,8 +31,9 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
         start = hrClock::now();
         fin.open("sarasas" + std::to_string(m) + ".txt");
         if (!fin.is_open()) {
-            cout << "Nepavyko failo atidarymas" << endl;
-            break;
+            std::cerr << "Nepavyko failo 'sarasas" + std::to_string(m) + ".txt' atidarymas! Sugeneruokite " << cycle
+                      << " failus." << endl;
+            exit(1);
         }
         y *= 10;
         stud.reserve(y);
@@ -46,7 +48,7 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
                 }
                 continue;
             }
-            temp.readStudent(iss, n);
+            iss >> temp;
             stud.push_back(temp);
         } //irasom i studentu vektoriu
 
@@ -56,13 +58,12 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
 
         CalculateV(stud, med); // suskaiciuojam vidurki
 
-        // cout << "END: CalculateV" << endl;
         // isskirstom vektoriu i du vektorius:
         // blogi studentai lieka "stud", geri pereina i "good"
         if (strat) {
             if (enhanced) {
                 start = hrClock::now();
-                auto ptrGood = stable_partition(stud.begin(), stud.end(), [](Student &s) { return (s.getRes() < 5); });
+                auto ptrGood = stable_partition(stud.begin(), stud.end(), [](Student &s) { return (s < 5); });
                 geri.reserve(stud.end() - ptrGood);
                 std::copy(ptrGood, stud.end(), std::back_inserter(geri));
                 stud.resize(ptrGood - stud.begin());
@@ -74,9 +75,9 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
                      << elapsed.count() << " sec." << endl;
             } else {
                 start = hrClock::now();
-                std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+                std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1 < s2; });
                 int numberOfBad = 0;
-                while (stud[numberOfBad].getRes() < 5.0) {
+                while (stud[numberOfBad] < 5.0) {
                     numberOfBad++;
                 }
                 geri.reserve(stud.size() - numberOfBad);
@@ -91,9 +92,9 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
             }
         } else {
             start = hrClock::now();
-            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1 < s2; });
             int numberOfBad = 0;
-            while (stud[numberOfBad].getRes() < 5.0) {
+            while (stud[numberOfBad] < 5.0) {
                 numberOfBad++;
             }
             geri.reserve(stud.size() - numberOfBad);
@@ -124,33 +125,18 @@ void ReadSplitGenerateV(vector<Student> &stud, std::ofstream &fail, std::ofstrea
         mldc << "Egzaminas" << endl;
 
         for (auto &i : geri) {
-            mldc << left << setw(17) << i.getName() << left << std::setw(19) << i.getSurname()
-                 << left << setw(17);
-            for (double j : i.getNd()) {
-                mldc << left << setw(10) << j;
-            }
-            mldc << i.getExam() << endl;
+            mldc << i;
         }
         if (strat) {
             for (auto &i : stud) {
-                fail << left << setw(17) << i.getName() << left << std::setw(19) << i.getSurname()
-                     << left << setw(15);
-                for (double j : i.getNd()) {
-                    fail << left << setw(10) << j;
-                }
-                fail << i.getExam() << endl;
-            }
+                fail << i;
+            } // 2 strategija
         } else {
             for (auto &i : blogi) {
-                fail << left << setw(17) << i.getName() << left << std::setw(19) << i.getSurname()
-                     << left << setw(15);
-                for (double j : i.getNd()) {
-                    fail << left << setw(10) << j;
-                }
-                fail << i.getExam() << endl;
-            }
-        }
-        //cout << "END: Irasymas i failus. NAUJAS CIKLAS." << endl;
+                fail << i;
+            } // 1 strategija
+        } // Ä¯raÅ¡omi studentai Ä¯ 2 failus
+
         mldc << endl;
         fail << endl;
         stud.clear();
@@ -220,10 +206,11 @@ void Input(vector<Student> &stud) {
             cin >> dest;
             fin.open(dest);
             if (!fin) {
-                throw "Failo atidarymas nepavyko!\n";
+                throw std::runtime_error(
+                        "Failas nerastas! Isitikinkite, kad direktorijoje yra failas tokiu pavadinimu ir pletiniu (pvz. .txt)");
             }
-        } catch (const char *msg) {
-            std::cerr << msg;
+        } catch (std::exception const &e) {
+            std::cerr << e.what();
             exit(1);
         }
 
@@ -238,7 +225,7 @@ void Input(vector<Student> &stud) {
                 }
                 continue;
             }
-            temp.readStudent(iss, n);
+            iss >> temp;
             stud.push_back(temp);
         }
         fin.close();
@@ -359,7 +346,7 @@ void CalculateV(vector<Student> &stud, bool isMed) {
                 med = (*it).getNd()[(*it).getNd().size() / 2];
             } else {
                 med = ((*it).getNd()[((*it).getNd().size() / 2) - 1] +
-                        (*it).getNd()[(*it).getNd().size() / 2]) / 2.0;
+                       (*it).getNd()[(*it).getNd().size() / 2]) / 2.0;
             }
             (*it).setRes(0.4 * med + 0.6 * (*it).getExam());
         }
@@ -378,7 +365,7 @@ void CalculateV(vector<Student> &stud, bool isMed) {
     }
 }
 
-void PrintV(vector<Student> &stud) {
+void Print(vector<Student> &stud) {
     cout << "\nPavarde             Vardas              Galutinis (Vid.)  Galutinis (Med.)\n" <<
          "----------------------------------------------------------------------------" << std::endl;
 
@@ -436,8 +423,8 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
         start = hrClock::now();
         fin.open("sarasas" + std::to_string(m) + ".txt");
         if (!fin.is_open()) {
-            cout << "Nepavyko failo atidarymas" << endl;
-            break;
+            cout << "Nepavyko failo 'sarasas" + std::to_string(m) + ".txt' atidarymas" << endl;
+            exit(1);
         }
         y *= 10;
         for (int l = -1; std::getline(fin, line); l++) {
@@ -451,7 +438,7 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
                 }
                 continue;
             }
-            temp.readStudent(iss, n);
+            iss >> temp;
             stud.push_back(temp);
         } //irasom i studentu vektoriu
 
@@ -468,10 +455,10 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
         list<Student>::iterator itt;
         if (strat) {
             start = hrClock::now();
-            stud.sort([](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+            stud.sort([](Student &s1, Student &s2) { return s1 < s2; });
             itt = stud.begin();
             int count = 0;
-            while (itt->getRes() < 5.0) {
+            while (*itt < 5.0) {
                 itt++;
                 count++;
             }
@@ -479,13 +466,14 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
             stud.resize(count);
             end = hrClock::now();
             elapsed = end - start;
-            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (2 strategija): " << elapsed.count() << " sec." << endl;
+            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (2 strategija): " << elapsed.count()
+                 << " sec." << endl;
 
         } else {
             start = hrClock::now();
-            stud.sort([](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+            stud.sort([](Student &s1, Student &s2) { return s1 < s2; });
             itt = stud.begin();
-            while (itt->getRes() < 5.0) {
+            while (*itt < 5.0) {
                 itt++;
             }
             std::copy(itt, stud.end(), std::back_inserter(geri));
@@ -493,14 +481,12 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
             stud.clear();
             end = hrClock::now();
             elapsed = end - start;
-            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (1 strategija): " << elapsed.count() << " sec." << endl;
+            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (1 strategija): " << elapsed.count()
+                 << " sec." << endl;
         }
-
 
         fail << y << " studentu:" << endl << endl;
         fail << left << std::setw(17) << "Vardas" << left << std::setw(19) << "Pavarde";
-
-
         itt = stud.begin();
         for (long long int i = 0; i < itt->getNd().size(); i++) {
             fail << left << std::setw(10) << "ND" + std::to_string(i + 1);
@@ -514,35 +500,18 @@ void ReadSplitGenerateL(list<Student> &stud, std::ofstream &fail, std::ofstream 
         }
         mldc << "Egzaminas" << endl;
 
-
         for (itt = geri.begin(); itt != geri.end(); itt++) {
-            mldc << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                 << left << std::setw(17);
-            for (double j : itt->getNd()) {
-                mldc << left << std::setw(10) << j;
-            }
-            mldc << itt->getExam() << endl;
+            mldc << *itt;
         }
         if (strat) {
             for (itt = stud.begin(); itt != stud.end(); itt++) {
-                fail << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                     << left << std::setw(15);
-                for (double j : itt->getNd()) {
-                    fail << left << std::setw(10) << j;
-                }
-                fail << itt->getExam() << endl;
+                fail << *itt;
             }
         } else {
             for (itt = blogi.begin(); itt != blogi.end(); itt++) {
-                fail << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                     << left << std::setw(15);
-                for (double j : itt->getNd()) {
-                    fail << left << std::setw(10) << j;
-                }
-                fail << itt->getExam() << endl;
+                fail << *itt;
             }
         }
-
 
 
         mldc << endl;
@@ -584,7 +553,6 @@ void CalculateL(list<Student> &stud, bool isMed) {
 }
 
 
-
 void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream &mldc, bool strat, int cycle) {
     using hrClock = std::chrono::high_resolution_clock;
     hrClock::time_point start, end;
@@ -615,8 +583,8 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
         start = hrClock::now();
         fin.open("sarasas" + std::to_string(m) + ".txt");
         if (!fin.is_open()) {
-            cout << "Nepavyko failo atidarymas" << endl;
-            break;
+            cout << "Nepavyko failo 'sarasas" + std::to_string(m) + ".txt' atidarymas" << endl;
+            exit(1);
         }
         y *= 10;
         for (int l = -1; std::getline(fin, line); l++) {
@@ -630,7 +598,7 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
                 }
                 continue;
             }
-            temp.readStudent(iss, n);
+            iss >> temp;
             stud.push_back(temp);
         } //irasom i studentu vektoriu
 
@@ -645,10 +613,10 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
         deque<Student>::iterator itt;
         if (strat) {
             start = hrClock::now();
-            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1 < s2; });
             itt = stud.begin();
             int count = 0;
-            while (itt->getRes() < 5.0) {
+            while (*itt < 5.0) {
                 itt++;
                 count++;
             }
@@ -656,13 +624,14 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
             stud.resize(count);
             end = hrClock::now();
             elapsed = end - start;
-            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (2 strategija): " << elapsed.count() << " sec." << endl;
+            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (2 strategija): " << elapsed.count()
+                 << " sec." << endl;
 
         } else {
             start = hrClock::now();
-            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1.getRes() < s2.getRes(); });
+            std::sort(stud.begin(), stud.end(), [](Student &s1, Student &s2) { return s1 < s2; });
             itt = stud.begin();
-            while (itt->getRes() < 5.0) {
+            while (*itt < 5.0) {
                 itt++;
             }
             std::copy(itt, stud.end(), std::back_inserter(geri));
@@ -670,7 +639,8 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
             stud.clear();
             end = hrClock::now();
             elapsed = end - start;
-            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (1 strategija): " << elapsed.count() << " sec." << endl;
+            cout << "Failo (su " << y << " irasu) rusiavimo i dvi grupes laikas (1 strategija): " << elapsed.count()
+                 << " sec." << endl;
         }
 
         fail << y << " studentu:" << endl << endl;
@@ -692,30 +662,15 @@ void ReadSplitGenerateD(deque<Student> &stud, std::ofstream &fail, std::ofstream
 
 
         for (itt = geri.begin(); itt != geri.end(); itt++) {
-            mldc << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                 << left << std::setw(17);
-            for (double j : itt->getNd()) {
-                mldc << left << std::setw(10) << j;
-            }
-            mldc << itt->getExam() << endl;
+            mldc << *itt;
         }
         if (strat) {
             for (itt = stud.begin(); itt != stud.end(); itt++) {
-                fail << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                     << left << std::setw(15);
-                for (double j : itt->getNd()) {
-                    fail << left << std::setw(10) << j;
-                }
-                fail << itt->getExam() << endl;
+                fail << *itt;
             }
         } else {
             for (itt = blogi.begin(); itt != blogi.end(); itt++) {
-                fail << left << std::setw(17) << itt->getName() << left << std::setw(19) << itt->getSurname()
-                     << left << std::setw(15);
-                for (double j : itt->getNd()) {
-                    fail << left << std::setw(10) << j;
-                }
-                fail << itt->getExam() << endl;
+                fail << *itt;
             }
         }
 
