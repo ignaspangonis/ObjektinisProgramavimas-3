@@ -11,7 +11,7 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o container.o func.o Student.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-## Programos (v1.2) naudojimas:
+## Programos (v1.5) naudojimas:
 ### Pavyzdžiai:
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
@@ -98,3 +98,8 @@ Gasiunas            Augustas            8.16              8.16
 - Lyginimo operatoriai yra skirti palyginti dviems objektams (studentų rezultatams) arba objektui (studento rezultatui) ir realiajam skaičiui.
 - Įvesties operatorius nuskaito iš stream'o studento duomenis tokiu eiliškumu: vardas, pavardė, egzaminas, namų darbai;
 - Išvesties operatorius įrašo į stream'ą studento duomenis tokiu eiliškumu: vardas, pavardė, namų darbai, egzaminas;
+
+### [v1.5](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v1.5)
+#### Patobulinimai:
+- Klasė Student buvo išskaidyta į dvi klases - Person (bazinė klasė) ir Student (išvestinė klasė).
+- Person klasė paversta sąsąjos (interface) klase, t.y. jos funkcijos yra abstrakčios.
