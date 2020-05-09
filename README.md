@@ -61,6 +61,7 @@ Gasiunas            Augustas            8.16              8.16
 1. Procesorius Intel Core i5-7300HQ CPU @ 2.50 GHz
 2. RAM 8.00 GB
 3. HDD 2 TB
+4. Windows OS
 
 ## Versijos
 ### Ankstesnes versijas rasite [šioje repozitorijoje](https://github.com/ignaspangonis/ObjektinisProgramavimas-2/)
