@@ -1,4 +1,4 @@
-# Objektinio programavimo užduotis nr. 3 (nr. 2 tęsinys)
+# Objektinio programavimo užduoties nr. 2 tęsinys
 
 ## Programos diegimas:
 1. Parsisiųsti programą.
