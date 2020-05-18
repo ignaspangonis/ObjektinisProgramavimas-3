@@ -11,7 +11,7 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o container.o func.o Student.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-## Programos (v1.5) naudojimas:
+## Programos (v2.0) naudojimas:
 ### Pavyzdžiai:
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
@@ -104,3 +104,18 @@ Gasiunas            Augustas            8.16              8.16
 #### Patobulinimai:
 - Klasė Student buvo išskaidyta į dvi klases - Person (bazinė klasė) ir Student (išvestinė klasė).
 - Person klasė paversta sąsąjos (interface) klase, t.y. jos funkcijos yra abstrakčios.
+
+### [v2.0](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v2.0)
+#### Patobulinimai:
+- Sukurtas kopijavimo operatorius;
+- Sugeneruota Doxygen dokumentacija (aplanke /doc);
+- Su Catch framework'u sukurti ir įvykdyti unit testai.
+#### Unit testing:
+Testais įsitikinta, kad veikia:
+
+- Studentų pavardžių lyginimas naudojant get'erius;
+- Galutinio balo skaičiavimas:
+  - Pagal vidurkį;
+  - Pagal medianą;
+- Student klasės palyginimo operatoriai, lyginantys galutinius balus;
+- Student klasės kopijavimo operatorius.
