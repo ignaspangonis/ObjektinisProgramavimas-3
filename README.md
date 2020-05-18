@@ -11,7 +11,28 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
 - `g++ -o main main.o container.o func.o Student.o`
 - Paleiskite programą įrašydami `./main` arba `main`
 
-## Programos (v1.5) naudojimas:
+## Programos (v2.0) naudojimas:
+### Vartotojo galimybės:
+**Pasirinkti, ar matuoti programos veikimo spartą su skirtingais konteineriais, ar paleisti programą.**
+- *Pasirinkus paleisti programą, pasirinkti:*
+  - ar studento duomenis skaityti iš failo, ar generuoti atsitiktinai, ar įvesti ranka;
+  - ar galutinį balą skaičiuoti pagal vidurkį, ar medianą;
+  - duomenų failų generavimą;
+  - ar skaityti visus 5 sugeneruotus failus, ar tik vieną;
+  - įvesti skaitomo duomenų failo pavadinimą;
+  - Jei pasirenkamas balų generavimas arba įvedimas ranka, suteikiama galimybė:
+    - Įvesti studento vardą, pavardę
+    - Įvesti/generuoti egzamino ir namų darbų balus
+    - Namų darbų įvedimo/generavimo metu nuspręsti, kiek jų bus įvesta/sugeneruota
+    - Įvedus vieno studento duomenis pasirinkti, ar reikia įvesti daugiau studentų duomenų
+- *Pasirinkus matuoti programos veikimo spartą, pasirinkti:*
+  - konteinerį (vector (v), list (l), deque (d));
+    - ar naudoti studentų skirstymą spartinančius algoritmus vektoriui;
+  - programos matavimo strategiją (antroji yra spartesnė).
+  - duomenų failų generavimą;
+  - kiek failų skaityti ir/ar generuoti;
+  - ar galutinį balą skaičiuoti pagal vidurkį, ar medianą;
+
 ### Pavyzdžiai:
 ```
 Norite matuoti programos veikimo sparta su skirtingais konteineriais (iveskite 0), ar paleisti programa (iveskite 1)?
@@ -104,3 +125,18 @@ Gasiunas            Augustas            8.16              8.16
 #### Patobulinimai:
 - Klasė Student buvo išskaidyta į dvi klases - Person (bazinė klasė) ir Student (išvestinė klasė).
 - Person klasė paversta sąsąjos (interface) klase, t.y. jos funkcijos yra abstrakčios.
+
+### [v2.0](https://github.com/ignaspangonis/ObjektinisProgramavimas-3/releases/tag/v2.0)
+#### Patobulinimai:
+- Sukurtas kopijavimo operatorius;
+- Sugeneruota Doxygen dokumentacija (aplanke /doc);
+- Su Catch framework'u sukurti ir įvykdyti unit testai.
+#### Unit testing:
+*Testais įsitikinta, kad veikia:*
+
+- Studentų pavardžių lyginimas naudojant get'erius;
+- Galutinio balo skaičiavimas:
+  - *Pagal vidurkį;*
+  - *Pagal medianą;*
+- Student klasės palyginimo operatoriai, lyginantys galutinius balus;
+- Student klasės kopijavimo operatorius.
