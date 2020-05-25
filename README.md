@@ -32,6 +32,7 @@ b) Jei naudojate GCC be GNU Make, įrašykite:
   - duomenų failų generavimą;
   - kiek failų skaityti ir/ar generuoti;
   - ar galutinį balą skaičiuoti pagal vidurkį, ar medianą;
+**Atidaryti dokumentacijos puslapį doc/html aplanke atsidarius index.html failą.**
 
 ### Pavyzdžiai:
 ```
