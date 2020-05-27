@@ -16,6 +16,7 @@
 #include <list>
 #include <deque>
 #include <functional>
+#include <utility>
 
 using std::cout;
 using std::endl;
@@ -31,15 +32,19 @@ using std::list;
 using std::deque;
 using std::istream;
 
+/// Abstrakti žmogaus klasė
 class Person {
 protected:
-    std::string name;
-    std::string surname;
+    string name;
+    string surname;
 public:
     virtual const string &getName() const = 0;
     virtual const string &getSurname() const = 0;
+    Person(string name, string surname);
+    Person();
 };
 
+/// Studento klasė
 class Student : public Person {
 private:
     vector<double> nd;
@@ -50,10 +55,19 @@ public:
     const string &getSurname() const override;
     const vector<double> &getNd() const;
     int getExam() const;
-    double getRes() const; // get'eriai
-
+    double getRes() const;
     void setName(const string &name_);
     void setSurname(const string &surname_);
+
+    Student& operator=(const Student& origin);
+    Student(const Student& origin);
+
+    Student(const string &name, const string &surname, vector<double> nd, int exam, double res);
+    Student(const string &name, const string &surname, double res);
+    Student(const string &name, const string &surname, vector<double> nd, int exam);
+    Student(const string &name, const string &surname);
+    Student();
+
     void setNd(const vector<double> &nd_);
     void setExam(int exam_);
     void setRes(double res_); // set'eriai

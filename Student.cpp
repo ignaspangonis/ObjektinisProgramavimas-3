@@ -1,5 +1,7 @@
 #include "Student.h"
 
+#include <utility>
+
 class Person;
 class Student;
 
@@ -36,3 +38,32 @@ void Student::setExam(int exam_) {
 void Student::setRes(double res_) {
     Student::res = res_;
 }
+
+// konstruktoriai:
+
+Student::Student(const string &name, const string &surname, vector<double> nd, int exam, double res) : Person(
+        name, surname), nd(std::move(nd)), exam(exam), res(res) {}
+Student::Student(const string &name, const string &surname, double res) : Person(name, surname), res(res) {}
+Student::Student() = default;
+Student::Student(const string &name, const string &surname) : Person(name, surname) {}
+Student::Student(const string &name, const string &surname, vector<double> nd, int exam) : Person(name, surname), nd(std::move(nd)), exam(exam), res(0) {}
+
+Student& Student::operator=(const Student& origin) {
+    name = origin.name;
+    surname = origin.surname;
+    nd = origin.nd;
+    exam = origin.exam;
+    res = origin.res;
+    return *this;
+}
+
+Student::Student(const Student &origin) {
+    name = origin.name;
+    surname = origin.surname;
+    nd = origin.nd;
+    exam = origin.exam;
+    res = origin.res;
+}
+
+Person::Person(string name, string surname) : name((std::move(name))), surname(std::move(surname)) {}
+Person::Person() {}
