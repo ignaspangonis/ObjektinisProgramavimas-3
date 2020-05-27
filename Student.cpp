@@ -2,6 +2,29 @@
 
 class Student;
 
+Student::Student(string name_, string surname_, vector<double> nd_, int exam_, double res_) : name(std::move(name_)), surname(std::move(surname_)), nd(std::move(nd_)), exam(exam_), res(res_) {}
+Student::Student(string name_, string surname_, double res_) : name(std::move(name_)), surname(std::move(surname_)), res(res_) {}
+Student::Student() = default;
+Student::Student(string name_, string surname_) : name(std::move(name_)), surname(std::move(surname_)) {}
+Student::Student(string name_, string surname_, vector<double> nd_, int exam_) : name(std::move(name_)), surname(std::move(surname_)), nd(std::move(nd_)), exam(exam_), res(0) {}
+
+Student& Student::operator=(const Student& origin) {
+    name = origin.name;
+    surname = origin.surname;
+    nd = origin.nd;
+    exam = origin.exam;
+    res = origin.res;
+    return *this;
+}
+
+Student::Student(const Student &origin) {
+    name = origin.name;
+    surname = origin.surname;
+    nd = origin.nd;
+    exam = origin.exam;
+    res = origin.res;
+}
+
 // get'eriai:
 const string &Student::getName() const {
     return name;

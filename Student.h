@@ -15,6 +15,7 @@
 #include <chrono>
 #include <list>
 #include <deque>
+#include <utility>
 #include <functional>
 
 using std::cout;
@@ -55,6 +56,15 @@ public:
     void sortNd() {
         sort(nd.begin(), nd.end());
     }
+
+    Student& operator=(const Student& origin);
+    Student(const Student& origin);
+
+    Student(string name, string surname, vector<double> nd, int exam, double res);
+    Student(string name, string surname, double res);
+    Student(string name, string surname, vector<double> nd, int exam);
+    Student(string name, string surname);
+    Student();
 
     friend std::istream& operator >>(std::istream& in, Student& s) {
         in >> s.name >> s.surname;
